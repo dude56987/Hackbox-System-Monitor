@@ -1,0 +1,53 @@
+*{
+	background-color: darkgray;
+}
+.graph img{
+	width: 480px;
+	height: 300px;
+	float: left;
+	border-style: outset;
+	border-width: 5px;
+	border-color: gray;
+	padding: 0px;
+	margin: 5px;
+}
+.graph img:hover{
+	border-style: inset;
+	border-color: lightgray;
+}
+h1{
+	width: 100%;
+	text-align: center;
+	color: white;
+}
+hr{
+	width: 100%;
+}
+.main{
+	width:1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.buttons{
+	width: 500px;
+	margin: auto;
+}
+.buttons a{
+	text-decoration: none;
+}
+.buttons a span{
+	background-color:gray;
+	color: white;
+	text-align: center;
+	width: 150px;
+	border-style: outset;
+	border-width: 5px;
+	border-color: gray;
+	padding: 5px;
+	margin: 5px;
+}
+.buttons a span:hover{
+	border-style: inset;
+	background-color: darkgray;
+	border-color: darkgray;
+}
