@@ -2,7 +2,7 @@ Package: hackbox-system-monitor
 Version: 0.0.1
 Section: admin
 Maintainer: Carl J Smith <BM-NBHLt5EUFVEbRCmrbVrfCyaB2c8d24U9>
-Installed-Size: 44
+Installed-Size: 76
 Priority: optional
 Architecture: all
 Depends: munin, munin-node, munin-plugins-extra, vnstati, apache2
