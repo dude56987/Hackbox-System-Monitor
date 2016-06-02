@@ -29,16 +29,18 @@ hr{
 	margin-right: auto;
 }
 .buttons{
-	width: 500px;
+	text-align: center;
+	width: 100%;
 	margin: auto;
 }
 .buttons a{
 	text-decoration: none;
+	margin: auto;
 }
 .buttons a span{
+	margin: auto;
 	background-color:gray;
 	color: white;
-	text-align: center;
 	width: 150px;
 	border-style: outset;
 	border-width: 5px;
