@@ -6,6 +6,8 @@ install: build
 	sudo gdebi -n hackbox-system-monitor_UNSTABLE.deb
 uninstall:
 	sudo apt-get purge hackbox-system-monitor
+uninstall-broken:
+	sudo dpkg --remove --force-remove-reinstreq hackbox-system-monitor
 installed-size:
 	du -sx --exclude DEBIAN ./debian/
 build: 
@@ -15,6 +17,7 @@ build-deb:
 	mkdir -p debian;
 	mkdir -p debian/DEBIAN;
 	mkdir -p debian/usr;
+	mkdir -p debian/usr/bin;
 	mkdir -p debian/usr/share/hackbox-system-monitor;
 	mkdir -p debian/usr/share/hackbox-system-monitor/interfaces;
 	mkdir -p debian/usr/share/hackbox-system-monitor/scripts;
@@ -23,16 +26,19 @@ build-deb:
 	mkdir -p debian/etc/apache2/;
 	mkdir -p debian/etc/apache2/sites-enabled/;
 	mkdir -p debian/etc/apache2/conf-enabled/;
-	# copy over the scripts
+	# copy update script to /usr/bin
+	cp hackbox-system-monitor-update.sh debian/usr/bin/hackbox-system-monitor-update
+	# make the script executable only by root
+	chmod u+rwx debian/usr/bin/hackbox-system-monitor-update
+	chmod go-rwx debian/usr/bin/hackbox-system-monitor-update
+	# create realitive links so package can use them for cron job location
+	ln -rs debian/usr/bin/hackbox-system-monitor-update debian/etc/cron.daily/hackbox-system-monitor-update
+	# copy over the scripts and templates
 	cp -v scripts/* debian/usr/share/hackbox-system-monitor/scripts/
-	cp -v template.css debian/usr/share/hackbox-system-monitor/
+	cp -v template.* debian/usr/share/hackbox-system-monitor/
 	# copy over apache configs
 	cp -v apacheConf/hackbox-system-monitor-ports.conf debian/etc/apache2/conf-enabled/
 	cp -v apacheConf/hackbox-system-monitor-website.conf debian/etc/apache2/sites-enabled/
-	# copy over the cron file that runs update scripts on the site
-	cp -v hackbox-system-monitor-update.sh debian/etc/cron.daily/hackbox-system-monitor-update
-	# make the cron script executable
-	chmod +x debian/etc/cron.daily/hackbox-system-monitor-update
 	# Create the md5sums file
 	find ./debian/ -type f -print0 | xargs -0 md5sum > ./debian/DEBIAN/md5sums
 	# cut filenames of extra junk

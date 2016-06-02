@@ -1,2 +1,4 @@
 # restart apache to unload the site
 apache2ctl restart
+# clean out the website cache
+rm -rv /var/cache/hackbox-system-monitor || echo 'Cache is already empty...'

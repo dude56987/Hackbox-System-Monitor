@@ -45,16 +45,16 @@ for timeFrame in $timeFrameList;do
 	echo "<a href="week.html"><span>Weekly</span></a>" >> $webpageUrl;
 	echo "<a href="month.html"><span>Monthly</span></a>" >> $webpageUrl;
 	echo "<a href="year.html"><span>Yearly</span></a>" >> $webpageUrl;
-	echo "<a href="/var/cache/munin/www/localdomain/localhost.localdomain/index.html"><span>Munin</span></a>" >> $webpageUrl;
+	echo "<a href="http://$(hostname):4949/"><span>Munin</span></a>" >> $webpageUrl;
 	echo "</div>" >> $webpageUrl;
 	echo "<br /><hr />" >> $webpageUrl;
 	# create array graphs to generate for munin
 	muninGraphs="entropy load cpu memory processes interrupts df diskstats_iops uptime users fail2ban lpstat";
-	muninPath=/var/cache/munin/www/localdomain/localhost.localdomain/;
 	for muninGraph in $muninGraphs;do
-		tempPath=$muninPath$muninGraph-$timeFrame
-		echo "<a class='graph' href='$tempPath.png'>" >> $webpageUrl;
-		echo "<img id='$tempPath' src='$tempPath.png' /></a>" >> $webpageUrl;
+		tempFileName=$muninGraph-$timeFrame.png
+		ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
+		echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
+		echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
 	done
 	# generate the network interfaces section
 	echo "<h1>Active Network Devices</h1>" >> $webpageUrl;
@@ -65,7 +65,7 @@ for timeFrame in $timeFrameList;do
 		# clean up the path to get the device name
 		device=$(echo $path|sed 's/\/var\/lib\/vnstat\///g')
 		# create a path to store generated graphs for each device
-		devicePath=/var/cache/hackbox-system-monitor/website/$device
+		devicePath=/var/cache/hackbox-system-monitor/$device
 		# if network device has been used draw graphs
 		echo $muninPath"if_"$device-$timeFrame".png"
 		if [ -f $muninPath"if_"$device-$timeFrame".png" ];then
@@ -79,19 +79,20 @@ for timeFrame in $timeFrameList;do
 			# create links to munin graphs for device
 			muninGraphs="if_ if_err_";
 			for muninGraph in $muninGraphs;do
-				tempPath=$muninPath$muninGraph$device-$timeFrame
-				echo "<a class='graph' href='$tempPath.png'>" >> $webpageUrl;
-				echo "<img id='$tempPath' src='$tempPath.png' /></a>" >> $webpageUrl;
+				tempFileName=$muninGraph$device-$timeFrame.png
+				ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
+				echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
+				echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
 			done
 			# create links to generated paths in webpage
-			echo "<a class='graph' href='$devicePath/summary.png'>" >> $webpageUrl
-			echo "<img src='$devicePath/summary.png' /></a>" >> $webpageUrl
-			echo "<a class='graph' href='$devicePath/hourly.png'>" >> $webpageUrl
-			echo "<img src='$devicePath/hourly.png' /></a>" >> $webpageUrl
-			echo "<a class='graph' href='$devicePath/monthly.png'>" >> $webpageUrl
-			echo "<img src='$devicePath/monthly.png' /></a>" >> $webpageUrl
-			echo "<a class='graph' href='$devicePath/top.png'>" >> $webpageUrl
-			echo "<img src='$devicePath/top.png' /></a>" >> $webpageUrl
+			echo "<a class='graph' href='$device/summary.png'>" >> $webpageUrl
+			echo "<img src='$device/summary.png' /></a>" >> $webpageUrl
+			echo "<a class='graph' href='$device/hourly.png'>" >> $webpageUrl
+			echo "<img src='$device/hourly.png' /></a>" >> $webpageUrl
+			echo "<a class='graph' href='$device/monthly.png'>" >> $webpageUrl
+			echo "<img src='$device/monthly.png' /></a>" >> $webpageUrl
+			echo "<a class='graph' href='$device/top.png'>" >> $webpageUrl
+			echo "<img src='$device/top.png' /></a>" >> $webpageUrl
 		fi
 	done
 	echo "</div></body>" >> $webpageUrl

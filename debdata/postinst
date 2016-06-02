@@ -1,4 +1,4 @@
 # restart apache to load up the site
 apache2ctl restart
 # run the update mechanism to generate the first set of graphs
-./etc/cron.daily/hackbox-system-monitor-update
+hackbox-system-monitor-update
