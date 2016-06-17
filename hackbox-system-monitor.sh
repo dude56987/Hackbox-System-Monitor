@@ -78,7 +78,7 @@ elif [ "$1" == "add" ];then
 	headerString="Existing Accounts:\n$existingAccounts\n\nType a new name for a new user account.\nType a existing name to change the password."
 	output=$(dialog --inputbox "$headerString" 24 80 --output-fd 1)
 	# if the user typed something
-	if [ $? == 0 ] && [$output != ""];then
+	if [ $? == 0 ] && [ $output != "" ];then
 		# add a new user to the .htpasswd file
 		htpasswd /usr/share/hackbox-system-monitor/templates/htpasswd $output
 		echo "User $output has been added to the list of allowed users and thier password was updated."
@@ -89,7 +89,7 @@ elif [ "$1" == "delete" ];then
 	existingAccounts=$(echo "$existingAccounts" | sed -e "s/\:.*$//g")
 	output=$(dialog --inputbox "Existing Accounts:\n$existingAccounts\n\nType a username to delete that account." 24 80 --output-fd 1)
 	# if the user typed something
-	if [ $? == 0 ] && [$output != ""];then
+	if [ $? == 0 ] && [ $output != "" ];then
 		# run grep in inverted mode to show only nonmatching lines
 		# pipe that back into the file to remove only one user line
 		grep -v "^$output:" /usr/share/hackbox-system-monitor/templates/htpasswd > /usr/share/hackbox-system-monitor/templates/htpasswd
