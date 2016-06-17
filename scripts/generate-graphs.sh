@@ -31,9 +31,9 @@ for timeFrame in $timeFrameList;do
 	echo "<html><head>" > $webpageUrl;
 	echo "<title>$(hostname) System Monitor</title>" >> $webpageUrl;
 	echo "<style>" >> $webpageUrl
-	cat /usr/share/hackbox-system-monitor/template.css >> $webpageUrl;
+	cat /usr/share/hackbox-system-monitor/templates/template.css >> $webpageUrl;
 	echo "</style><script>" >> $webpageUrl;
-	cat /usr/share/hackbox-system-monitor/template.js >> $webpageUrl;
+	cat /usr/share/hackbox-system-monitor/templates/template.js >> $webpageUrl;
 	echo "</script><body>" >> $webpageUrl;
 	echo "<div class='main'>" >> $webpageUrl;
 	# generate the munin graphs

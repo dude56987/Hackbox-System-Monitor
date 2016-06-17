@@ -1,7 +1,24 @@
+########################################################################
+# hackbox-system-monitor makefile
+# Copyright (C) 2016  Carl J Smith
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+########################################################################
 show:
 	echo 'Run "make install" as root to install program!'
 test:
-	sudo bash /etc/cron.daily/hackbox-system-monitor-update
+	sudo bash hackbox-system-monitor.sh
 install: build
 	sudo gdebi -n hackbox-system-monitor_UNSTABLE.deb
 uninstall:
@@ -19,23 +36,23 @@ build-deb:
 	mkdir -p debian/usr;
 	mkdir -p debian/usr/bin;
 	mkdir -p debian/usr/share/hackbox-system-monitor;
-	mkdir -p debian/usr/share/hackbox-system-monitor/interfaces;
 	mkdir -p debian/usr/share/hackbox-system-monitor/scripts;
+	mkdir -p debian/usr/share/hackbox-system-monitor/templates;
 	mkdir -p debian/etc;
 	mkdir -p debian/etc/cron.daily/;
 	mkdir -p debian/etc/apache2/;
 	mkdir -p debian/etc/apache2/sites-enabled/;
 	mkdir -p debian/etc/apache2/conf-enabled/;
 	# copy update script to /usr/bin
-	cp hackbox-system-monitor-update.sh debian/usr/bin/hackbox-system-monitor-update
+	cp hackbox-system-monitor.sh debian/usr/bin/hackbox-system-monitor
 	# make the script executable only by root
-	chmod u+rwx debian/usr/bin/hackbox-system-monitor-update
-	chmod go-rwx debian/usr/bin/hackbox-system-monitor-update
+	chmod u+rwx debian/usr/bin/hackbox-system-monitor
+	chmod go-rwx debian/usr/bin/hackbox-system-monitor
 	# create realitive links so package can use them for cron job location
-	ln -rs debian/usr/bin/hackbox-system-monitor-update debian/etc/cron.daily/hackbox-system-monitor-update
+	ln -rs debian/usr/bin/hackbox-system-monitor debian/etc/cron.daily/hackbox-system-monitor-update
 	# copy over the scripts and templates
 	cp -v scripts/* debian/usr/share/hackbox-system-monitor/scripts/
-	cp -v template.* debian/usr/share/hackbox-system-monitor/
+	cp -v templates/* debian/usr/share/hackbox-system-monitor/templates/
 	# copy over apache configs
 	cp -v apacheConf/hackbox-system-monitor-ports.conf debian/etc/apache2/conf-enabled/
 	cp -v apacheConf/hackbox-system-monitor-website.conf debian/etc/apache2/sites-enabled/
