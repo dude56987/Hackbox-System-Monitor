@@ -81,7 +81,7 @@ elif [ "$1" == "add" ];then
 	if [ $? == 0 ] && [ $output != "" ];then
 		# add a new user to the .htpasswd file
 		htpasswd /usr/share/hackbox-system-monitor/templates/htpasswd $output
-		echo "User $output has been added to the list of allowed users and thier password was updated."
+		echo "User $output has been added to the list of allowed users and the password was updated."
 	fi
 elif [ "$1" == "delete" ];then
 	# load up the existing accounts to show them above the input form

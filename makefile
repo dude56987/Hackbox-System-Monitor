@@ -35,6 +35,7 @@ build-deb:
 	mkdir -p debian/DEBIAN;
 	mkdir -p debian/usr;
 	mkdir -p debian/usr/bin;
+	mkdir -p debian/usr/share/applications;
 	mkdir -p debian/usr/share/hackbox-system-monitor;
 	mkdir -p debian/usr/share/hackbox-system-monitor/scripts;
 	mkdir -p debian/usr/share/hackbox-system-monitor/templates;
@@ -45,6 +46,8 @@ build-deb:
 	mkdir -p debian/etc/apache2/conf-enabled/;
 	# copy update script to /usr/bin
 	cp hackbox-system-monitor.sh debian/usr/bin/hackbox-system-monitor
+	# copy over the .desktop launcher file to place link in system menus
+	cp hackbox-system-monitor.desktop debian/usr/share/applications/
 	# make the script executable only by root
 	chmod u+rwx debian/usr/bin/hackbox-system-monitor
 	chmod go-rwx debian/usr/bin/hackbox-system-monitor

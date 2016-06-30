@@ -1,10 +1,10 @@
 Package: hackbox-system-monitor
-Version: 0.0.2
+Version: 0.0.3
 Section: admin
 Maintainer: Carl J Smith <BM-NBHLt5EUFVEbRCmrbVrfCyaB2c8d24U9>
-Installed-Size: 76
+Installed-Size: 96
 Priority: optional
 Architecture: all
-Depends: munin, munin-node, munin-plugins-extra, vnstati, apache2(>=2.4)
+Depends: munin, munin-node, munin-plugins, munin-plugins-extra, vnstati, apache2(>=2.4)
 Description: Simplified main page for munin graphs.
  Provides a simplified interface for munin and vnstati graphs.

@@ -41,11 +41,14 @@ for timeFrame in $timeFrameList;do
 	# generate the buttons
 	echo "<hr /><br />" >> $webpageUrl;
 	echo "<div class='buttons'>" >> $webpageUrl;
-	echo "<a href="day.html"><span>Daily</span></a>" >> $webpageUrl;
-	echo "<a href="week.html"><span>Weekly</span></a>" >> $webpageUrl;
-	echo "<a href="month.html"><span>Monthly</span></a>" >> $webpageUrl;
-	echo "<a href="year.html"><span>Yearly</span></a>" >> $webpageUrl;
-	echo "<a href="http://$(hostname):4949/"><span>Munin</span></a>" >> $webpageUrl;
+	echo "<a href='day.html'><span>Daily</span></a>" >> $webpageUrl;
+	echo "<a href='week.html'><span>Weekly</span></a>" >> $webpageUrl;
+	echo "<a href='month.html'><span>Monthly</span></a>" >> $webpageUrl;
+	echo "<a href='year.html'><span>Yearly</span></a>" >> $webpageUrl;
+	# link the munin webserver directory to a local folder here
+	ln -s /var/cache/munin/www/ /var/cache/hackbox-system-monitor/
+	# create link to munin directory
+	echo "<a href='www/'><span>Munin</span></a>" >> $webpageUrl;
 	echo "</div>" >> $webpageUrl;
 	echo "<br /><hr />" >> $webpageUrl;
 	# create array graphs to generate for munin
