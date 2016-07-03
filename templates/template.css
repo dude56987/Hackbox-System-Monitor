@@ -53,3 +53,7 @@ hr{
 	background-color: darkgray;
 	border-color: darkgray;
 }
+pre {
+	background-color: white;
+	color: black;
+}

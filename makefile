@@ -18,7 +18,7 @@
 show:
 	echo 'Run "make install" as root to install program!'
 test:
-	sudo bash hackbox-system-monitor.sh
+	sudo time -v bash hackbox-system-monitor.sh
 install: build
 	sudo gdebi -n hackbox-system-monitor_UNSTABLE.deb
 uninstall:
@@ -37,9 +37,9 @@ build-deb:
 	mkdir -p debian/usr/bin;
 	mkdir -p debian/usr/share/applications;
 	mkdir -p debian/usr/share/hackbox-system-monitor;
-	mkdir -p debian/usr/share/hackbox-system-monitor/scripts;
-	mkdir -p debian/usr/share/hackbox-system-monitor/templates;
+	mkdir -p debian/usr/share/hackbox-system-monitor/modules;
 	mkdir -p debian/etc;
+	mkdir -p debian/etc/hackbox-system-monitor/templates;
 	mkdir -p debian/etc/cron.daily/;
 	mkdir -p debian/etc/apache2/;
 	mkdir -p debian/etc/apache2/sites-enabled/;
@@ -53,9 +53,11 @@ build-deb:
 	chmod go-rwx debian/usr/bin/hackbox-system-monitor
 	# create realitive links so package can use them for cron job location
 	ln -rs debian/usr/bin/hackbox-system-monitor debian/etc/cron.daily/hackbox-system-monitor-update
-	# copy over the scripts and templates
-	cp -v scripts/* debian/usr/share/hackbox-system-monitor/scripts/
-	cp -v templates/* debian/usr/share/hackbox-system-monitor/templates/
+	# copy over config file defining what modules to run
+	cp -v modules.conf debian/etc/hackbox-system-monitor/
+	# copy over the module scripts and templates
+	cp -v modules/* debian/usr/share/hackbox-system-monitor/modules/
+	cp -v templates/* debian/etc/hackbox-system-monitor/templates/
 	# copy over apache configs
 	cp -v apacheConf/hackbox-system-monitor-ports.conf debian/etc/apache2/conf-enabled/
 	cp -v apacheConf/hackbox-system-monitor-website.conf debian/etc/apache2/sites-enabled/

@@ -59,50 +59,58 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ "$1" == "help" ] ;then
 	echo "  .htpasswd file by hand."
 	echo "########################################################################"
 elif [ "$1" == "update" ];then
-	# run all the hackbox system monitor scripts to update graphs
-	bash /usr/share/hackbox-system-monitor/scripts/generate-graphs.sh
+	# for each module defined in the conf file for updates
+	for line in $(cat /etc/hackbox-system-monitor/modules.conf|grep -v '#');do
+		echo "###########################################################"
+		echo "Running script $line"
+		echo "###########################################################"
+		# run that script
+		bash /usr/share/hackbox-system-monitor/modules/$line
+		echo "###########################################################"
+		echo "Script $line has finished."
+		echo "###########################################################"
+	done
 elif [ "$1" == "lock" ];then
-	link /usr/share/hackbox-system-monitor/templates/htaccess /var/cache/hackbox-system-monitor/.htaccess
-	link /usr/share/hackbox-system-monitor/templates/htpasswd /var/cache/hackbox-system-monitor/.htpasswd
+	link /etc/hackbox-system-monitor/templates/htaccess /var/cache/hackbox-system-monitor/.htaccess
 	echo "All users must now provide a username and password before entering the website."
 	echo "For help managing users access the help menu with 'hackbox-system-monitor help'"
 elif [ "$1" == "unlock" ];then
 	# remove the .htaccess and .htpasswords to disable website logins
 	rm /var/cache/hackbox-system-monitor/.htaccess || echo 'Already unlocked!'
-	rm /var/cache/hackbox-system-monitor/.htpasswd || echo 'Already unlocked!'
 	echo "User login to the Hackbox System Monitor website has been disabled."
 	echo "A login is no longer required to access the web interface."
 elif [ "$1" == "add" ];then
-	existingAccounts=$(cat /usr/share/hackbox-system-monitor/templates/htpasswd)
+	existingAccounts=$(cat /etc/hackbox-system-monitor/templates/htpasswd)
 	existingAccounts=$(echo "$existingAccounts" | sed -e "s/\:.*$//g")
 	headerString="Existing Accounts:\n$existingAccounts\n\nType a new name for a new user account.\nType a existing name to change the password."
 	output=$(dialog --inputbox "$headerString" 24 80 --output-fd 1)
 	# if the user typed something
 	if [ $? == 0 ] && [ $output != "" ];then
 		# add a new user to the .htpasswd file
-		htpasswd /usr/share/hackbox-system-monitor/templates/htpasswd $output
+		# use -B to use stronger encryption
+		htpasswd -B /etc/hackbox-system-monitor/templates/htpasswd $output
 		echo "User $output has been added to the list of allowed users and the password was updated."
 	fi
 elif [ "$1" == "delete" ];then
 	# load up the existing accounts to show them above the input form
-	existingAccounts=$(cat /usr/share/hackbox-system-monitor/templates/htpasswd)
+	existingAccounts=$(cat /etc/hackbox-system-monitor/templates/htpasswd)
 	existingAccounts=$(echo "$existingAccounts" | sed -e "s/\:.*$//g")
 	output=$(dialog --inputbox "Existing Accounts:\n$existingAccounts\n\nType a username to delete that account." 24 80 --output-fd 1)
 	# if the user typed something
 	if [ $? == 0 ] && [ $output != "" ];then
 		# run grep in inverted mode to show only nonmatching lines
 		# pipe that back into the file to remove only one user line
-		grep -v "^$output:" /usr/share/hackbox-system-monitor/templates/htpasswd > /usr/share/hackbox-system-monitor/templates/htpasswd
+		grep -v "^$output:" /etc/hackbox-system-monitor/templates/htpasswd > /etc/hackbox-system-monitor/templates/htpasswd
 		echo "Deleted user $output from Hackbox System Monitor."
 	fi
 elif [ "$1" == "list" ];then
 	# list the existing users
-	existingAccounts=$(cat /usr/share/hackbox-system-monitor/templates/htpasswd)
+	existingAccounts=$(cat /etc/hackbox-system-monitor/templates/htpasswd)
 	existingAccounts=$(echo "$existingAccounts" | sed -e "s/\:.*$//g")
 	dialog --msgbox "Existing Accounts:\n$existingAccounts" 24 80
 elif [ "$1" == "edit" ];then
 	# edit the password users
-	vim /usr/share/hackbox-system-monitor/templates/htpasswd
+	vim /etc/hackbox-system-monitor/templates/htpasswd
 else
 	# if no arguments are given run the update then help commands.
 	hackbox-system-monitor update

@@ -1,4 +1,4 @@
-AuthUserFile /var/cache/hackbox-system-monitor/.htpasswd
+AuthUserFile /etc/hackbox-system-monitor/templates/htpasswd
 AuthName "Authorization Required"
 AuthType Basic
 require valid-user

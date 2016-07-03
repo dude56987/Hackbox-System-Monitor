@@ -31,9 +31,9 @@ for timeFrame in $timeFrameList;do
 	echo "<html><head>" > $webpageUrl;
 	echo "<title>$(hostname) System Monitor</title>" >> $webpageUrl;
 	echo "<style>" >> $webpageUrl
-	cat /usr/share/hackbox-system-monitor/templates/template.css >> $webpageUrl;
+	cat /etc/hackbox-system-monitor/templates/template.css >> $webpageUrl;
 	echo "</style><script>" >> $webpageUrl;
-	cat /usr/share/hackbox-system-monitor/templates/template.js >> $webpageUrl;
+	cat /etc/hackbox-system-monitor/templates/template.js >> $webpageUrl;
 	echo "</script><body>" >> $webpageUrl;
 	echo "<div class='main'>" >> $webpageUrl;
 	# generate the munin graphs
@@ -54,10 +54,14 @@ for timeFrame in $timeFrameList;do
 	# create array graphs to generate for munin
 	muninGraphs="entropy load cpu memory processes interrupts df diskstats_iops uptime users fail2ban lpstat";
 	for muninGraph in $muninGraphs;do
-		tempFileName=$muninGraph-$timeFrame.png
-		ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
-		echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
-		echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
+		tempFileName=$muninGraph-$timeFrame
+		ln -s $muninPath$tempFileName.png /var/cache/hackbox-system-monitor/$tempFileName.png
+		if [ -e /var/cache/hackbox-system-monitor/$tempFileName.html ];then
+			echo "<a class='graph' href='$tempFileName.html' >" >> $webpageUrl;
+		else
+			echo "<a class='graph' href='$tempFileName.png' >" >> $webpageUrl;
+		fi
+		echo "<img src='$tempFileName.png' /></a>" >> $webpageUrl;
 	done
 	# generate the network interfaces section
 	echo "<h1>Active Network Devices</h1>" >> $webpageUrl;
