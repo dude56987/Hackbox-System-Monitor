@@ -88,7 +88,9 @@ elif [ "$1" == "add" ];then
 	if [ $? == 0 ] && [ $output != "" ];then
 		# add a new user to the .htpasswd file
 		# use -B to use stronger encryption
-		htpasswd -B /etc/hackbox-system-monitor/templates/htpasswd $output
+		# -C defines the cost from 4 to 31
+		echo "The password will be encrypted, this may take a few minutes."
+		htpasswd -B -C 12 /etc/hackbox-system-monitor/templates/htpasswd $output
 		echo "User $output has been added to the list of allowed users and the password was updated."
 	fi
 elif [ "$1" == "delete" ];then
