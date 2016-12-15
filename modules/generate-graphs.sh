@@ -51,22 +51,28 @@ for timeFrame in $timeFrameList;do
 	echo "<a href='www/'><span>Munin</span></a>" >> $webpageUrl;
 	echo "</div>" >> $webpageUrl;
 	echo "<br /><hr />" >> $webpageUrl;
+	echo "<div id='mainGraphs'>" >> $webpageUrl;
 	# create array graphs to generate for munin
 	muninGraphs="entropy load cpu memory processes interrupts df diskstats_iops uptime users fail2ban lpstat";
 	for muninGraph in $muninGraphs;do
 		tempFileName=$muninGraph-$timeFrame
-		ln -s $muninPath$tempFileName.png /var/cache/hackbox-system-monitor/$tempFileName.png
-		if [ -e /var/cache/hackbox-system-monitor/$tempFileName.html ];then
-			echo "<a class='graph' href='$tempFileName.html' >" >> $webpageUrl;
-		else
-			echo "<a class='graph' href='$tempFileName.png' >" >> $webpageUrl;
+		# if the graph exists then generate the html for it
+		if [ -e $muninPath$tempFileName.png ];then
+			ln -s $muninPath$tempFileName.png /var/cache/hackbox-system-monitor/$tempFileName.png
+			if [ -e /var/cache/hackbox-system-monitor/$tempFileName.html ];then
+				echo "<a class='graph' href='$tempFileName.html' >" >> $webpageUrl;
+			else
+				echo "<a class='graph' href='$tempFileName.png' >" >> $webpageUrl;
+			fi
+			echo "<img src='$tempFileName.png' /></a>" >> $webpageUrl;
 		fi
-		echo "<img src='$tempFileName.png' /></a>" >> $webpageUrl;
 	done
+	echo "</div>" >> $webpageUrl;
 	# generate the network interfaces section
+	echo "<div id='activeNetworkDevices'>" >> $webpageUrl;
 	echo "<h1>Active Network Devices</h1>" >> $webpageUrl;
 	echo "<hr />" >> $webpageUrl;
-	# vnstat lists the devices in a directory that it stores 
+	# vnstat lists the devices in a directory that it stores
 	# stats on so use that directory to generate the graphs
 	for path in /var/lib/vnstat/*;do
 		# clean up the path to get the device name
@@ -87,9 +93,11 @@ for timeFrame in $timeFrameList;do
 			muninGraphs="if_ if_err_";
 			for muninGraph in $muninGraphs;do
 				tempFileName=$muninGraph$device-$timeFrame.png
-				ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
-				echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
-				echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
+				if [ -e $muninPath$tempFileName ];then
+					ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
+					echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
+					echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
+				fi
 			done
 			# create links to generated paths in webpage
 			echo "<a class='graph' href='$device/summary.png'>" >> $webpageUrl
@@ -101,6 +109,7 @@ for timeFrame in $timeFrameList;do
 			echo "<a class='graph' href='$device/top.png'>" >> $webpageUrl
 			echo "<img src='$device/top.png' /></a>" >> $webpageUrl
 		fi
+	echo "</div>" >> $webpageUrl;
 	done
 	echo "</div></body>" >> $webpageUrl
 done

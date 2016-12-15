@@ -1,5 +1,12 @@
 *{
 	background-color: darkgray;
+	float: none;
+}
+#activeNetworkDevices{
+	float: left;
+}
+#mainGraphs{
+	float: left;
 }
 .graph img{
 	width: 480px;
