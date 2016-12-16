@@ -27,7 +27,7 @@ uninstall-broken:
 	sudo dpkg --remove --force-remove-reinstreq hackbox-system-monitor
 installed-size:
 	du -sx --exclude DEBIAN ./debian/
-build: 
+build:
 	sudo make build-deb;
 build-deb:
 	# build the directories inside the package
@@ -40,7 +40,7 @@ build-deb:
 	mkdir -p debian/usr/share/hackbox-system-monitor/modules;
 	mkdir -p debian/etc;
 	mkdir -p debian/etc/hackbox-system-monitor/templates;
-	mkdir -p debian/etc/cron.daily/;
+	mkdir -p debian/etc/cron.d/;
 	mkdir -p debian/etc/apache2/;
 	mkdir -p debian/etc/apache2/sites-enabled/;
 	mkdir -p debian/etc/apache2/conf-enabled/;
@@ -51,8 +51,8 @@ build-deb:
 	# make the script executable only by root
 	chmod u+rwx debian/usr/bin/hackbox-system-monitor
 	chmod go-rwx debian/usr/bin/hackbox-system-monitor
-	# create realitive links so package can use them for cron job location
-	ln -rs debian/usr/bin/hackbox-system-monitor debian/etc/cron.daily/hackbox-system-monitor-update
+	# copy over the cron job
+	cp hackbox-system-monitor.cron debian/etc/cron.d/hackbox-system-monitor-update
 	# copy over config file defining what modules to run
 	cp -v modules.conf debian/etc/hackbox-system-monitor/
 	# copy over the module scripts and templates
@@ -68,7 +68,7 @@ build-deb:
 	sed -i.bak 's/\\n*DEBIAN*\\n//g' ./debian/DEBIAN/md5sums
 	sed -i.bak 's/\\n*DEBIAN*//g' ./debian/DEBIAN/md5sums
 	rm -v ./debian/DEBIAN/md5sums.bak
-	# figure out the package size	
+	# figure out the package size
 	du -sx --exclude DEBIAN ./debian/ > Installed-Size.txt
 	# copy over package data
 	cp -rv debdata/. debian/DEBIAN/
