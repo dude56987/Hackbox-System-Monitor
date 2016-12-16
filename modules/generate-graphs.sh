@@ -65,6 +65,10 @@ for timeFrame in $timeFrameList;do
 				echo "<a class='graph' href='$tempFileName.png' >" >> $webpageUrl;
 			fi
 			echo "<img src='$tempFileName.png' /></a>" >> $webpageUrl;
+		else
+			# generate error codes in the HTML
+			echo "<!-- Generating HTML for $tempFileName has failed! -->" >> $webpageUrl;
+			echo "<!-- The approprate graph image could not be found! -->" >> $webpageUrl;
 		fi
 	done
 	echo "</div>" >> $webpageUrl;
@@ -99,6 +103,10 @@ for timeFrame in $timeFrameList;do
 					ln -s $muninPath$tempFileName /var/cache/hackbox-system-monitor/$tempFileName
 					echo "<a class='graph' href='$tempFileName'>" >> $webpageUrl;
 					echo "<img src='$tempFileName' /></a>" >> $webpageUrl;
+				else
+					# generate error codes in the html
+					echo "<!-- Generating HTML for $tempFileName has failed! -->" >> $webpageUrl;
+					echo "<!-- The approprate graph image could not be found! -->" >> $webpageUrl;
 				fi
 			done
 			# create links to generated paths in webpage
@@ -110,6 +118,11 @@ for timeFrame in $timeFrameList;do
 			echo "<img src='$device/monthly.png' /></a>" >> $webpageUrl
 			echo "<a class='graph' href='$device/top.png'>" >> $webpageUrl
 			echo "<img src='$device/top.png' /></a>" >> $webpageUrl
+		else
+			errorMsg="if_"$device-$timeFrame".png"
+			# generate error codes in the HTML
+			echo "<!-- Generating HTML for $errorMsg has failed! -->" >> $webpageUrl;
+			echo "<!-- The approprate graph image could not be found! -->" >> $webpageUrl;
 		fi
 		echo "</div>" >> $webpageUrl;
 	done
