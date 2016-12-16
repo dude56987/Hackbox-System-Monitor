@@ -77,6 +77,8 @@ for timeFrame in $timeFrameList;do
 	for path in /var/lib/vnstat/*;do
 		# clean up the path to get the device name
 		device=$(echo $path|sed 's/\/var\/lib\/vnstat\///g')
+		# generate the div that holds this interface's graphs
+		echo "<div id='"$device"'>" >> $webpageUrl;
 		# create a path to store generated graphs for each device
 		devicePath=/var/cache/hackbox-system-monitor/$device
 		# if network device has been used draw graphs
@@ -109,9 +111,11 @@ for timeFrame in $timeFrameList;do
 			echo "<a class='graph' href='$device/top.png'>" >> $webpageUrl
 			echo "<img src='$device/top.png' /></a>" >> $webpageUrl
 		fi
-	echo "</div>" >> $webpageUrl;
+		echo "</div>" >> $webpageUrl;
 	done
-	echo "</div></body>" >> $webpageUrl
+	echo "</div>" >> $webpageUrl
+	echo "</body>" >> $webpageUrl
+	echo "</html>" >> $webpageUrl
 done
 # copy day to index
 cp -v /var/cache/hackbox-system-monitor/day.html /var/cache/hackbox-system-monitor/index.html
