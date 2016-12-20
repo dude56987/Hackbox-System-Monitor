@@ -46,7 +46,11 @@ for timeFrame in $timeFrameList;do
 			mkdir -p $animationDir$tempFileName/
 			cp $muninPath$tempFileName.png $animationDir$tempFileName/$(date +%s).png
 			# generate animated gif from the files in each directory
-			convert -delay 20 -loop 0 $animationDir$tempFileName/*.png /var/cache/hackbox-system-monitor/$tempFileName.gif
+			if [ "$timeFrame" == "day" ];then
+				convert -delay 40 -loop 0 $animationDir$tempFileName/*.png /var/cache/hackbox-system-monitor/$tempFileName.gif
+			elif [ "$timeFrame" == "week" ];then
+				convert -delay 20 -loop 0 $animationDir$tempFileName/*.png /var/cache/hackbox-system-monitor/$tempFileName.gif
+			fi
 		fi
 	done
 done
